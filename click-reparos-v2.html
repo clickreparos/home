@@ -1,223 +1,438 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Click Reparos: manutenção, consertos e instalações em Itaboraí e região. Solicite seu orçamento pelo WhatsApp.">
-    <meta name="theme-color" content="#0a3871">
-    <title>Click Reparos | Manutenção em Itaboraí</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="app">
+/* =========================================================
+   CLICK REPAROS — JAVASCRIPT V2
+   ========================================================= */
 
-        <header>
-            <div class="header-top">
-                <div class="brand-lockup">
-                    <span class="brand-name">CLICK REPAROS</span>
-                    <span class="brand-city">Itaboraí e região</span>
-                </div>
-                <img src="logo.png" alt="Click Reparos" class="header-logo">
-            </div>
-            <div class="search-container">
-                <span class="search-icon">⌕</span>
-                <input type="text" id="search-input" placeholder="Procure um serviço ou problema..." autocomplete="off">
-                <div id="search-suggestions"></div>
-            </div>
-        </header>
+const WHATSAPP = "5521967358108";
 
-        <main id="view-categories" class="view active">
+const services = {
+  hidraulica: [
+    "Vazamento de torneira",
+    "Vazamento de cano",
+    "Troca de torneira",
+    "Troca de sifão",
+    "Conserto de descarga",
+    "Troca de registro",
+    "Reparo em pia",
+    "Desentupimento",
+    "Instalação de caixa d'água",
+    "Manutenção hidráulica"
+  ],
 
-            <section class="hero">
-                <div class="hero-eyebrow">🛠️ MANUTENÇÃO SEM COMPLICAÇÃO</div>
-                <h1>Seu reparo resolvido<br><span>sem complicação.</span></h1>
-                <p>Elétrica, hidráulica, instalações, pintura e pequenos reparos para sua casa ou empresa.</p>
+  eletrica: [
+    "Instalação de tomada",
+    "Instalação de interruptor",
+    "Troca de disjuntor",
+    "Reparo elétrico",
+    "Instalação de chuveiro",
+    "Instalação de luminária",
+    "Instalação de ventilador de teto",
+    "Reparo de fiação",
+    "Curto-circuito",
+    "Manutenção elétrica"
+  ],
 
-                <div class="hero-location">📍 Atendimento em <strong>Itaboraí e região</strong></div>
+  instalacoes: [
+    "Instalação de suporte de TV",
+    "Instalação de prateleira",
+    "Instalação de cortina",
+    "Instalação de espelho",
+    "Instalação de varal",
+    "Instalação de fechadura",
+    "Montagem de móveis",
+    "Instalação de eletrodomésticos",
+    "Fixação de objetos",
+    "Outras instalações"
+  ],
 
-                <button class="hero-cta" type="button" onclick="openGeneralWhatsApp()">
-                    <span class="wa-icon">◉</span>
-                    Solicitar orçamento pelo WhatsApp
-                </button>
-                <button class="hero-secondary" type="button" onclick="document.getElementById('services-section').scrollIntoView({behavior:'smooth'})">
-                    Ver serviços <span>↓</span>
-                </button>
-            </section>
+  pintura: [
+    "Pintura de parede",
+    "Retoque de pintura",
+    "Reparo em parede",
+    "Reparo de trinca",
+    "Reparo de infiltração",
+    "Aplicação de rejunte",
+    "Reparo em gesso",
+    "Troca de azulejo",
+    "Troca de piso",
+    "Pequenos reparos"
+  ]
+};
 
-            <section class="problem-section">
-                <div class="section-kicker">RESOLVEU O PROBLEMA?</div>
-                <h2>Deu problema? <span>Chama a Click.</span></h2>
-                <p class="section-lead">Você não precisa descobrir sozinho qual profissional chamar. Conte o que aconteceu e a gente orienta o próximo passo.</p>
-                <div class="problem-grid">
-                    <button class="problem-card" onclick="openCategory('cat-hidraulico')"><span>🚿</span><strong>Vazamento?</strong><small>Pia, torneira, vaso, cano...</small></button>
-                    <button class="problem-card" onclick="openCategory('cat-eletrico')"><span>⚡</span><strong>Problema elétrico?</strong><small>Tomada, chuveiro, luz...</small></button>
-                    <button class="problem-card" onclick="openCategory('cat-instalacoes')"><span>🔨</span><strong>Precisa instalar?</strong><small>TV, prateleira, cortina...</small></button>
-                    <button class="problem-card" onclick="openCategory('cat-pintor')"><span>🎨</span><strong>Precisa reparar?</strong><small>Parede, pintura, acabamento...</small></button>
-                </div>
-            </section>
 
-            <section id="services-section" class="services-section">
-                <div class="section-kicker">NOSSAS SOLUÇÕES</div>
-                <h2>O que podemos <span>resolver?</span></h2>
-                <p class="section-lead">Escolha uma área ou pesquise pelo problema que você está enfrentando.</p>
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
 
-                <div class="featured-grid">
-                    <button class="featured-card featured-hydraulic" onclick="openCategory('cat-hidraulico')">
-                        <span class="featured-icon">🚿</span>
-                        <span><strong>Hidráulica</strong><small>Vazamentos, torneiras, descargas e entupimentos</small></span>
-                        <b>›</b>
-                    </button>
-                    <button class="featured-card featured-electric" onclick="openCategory('cat-eletrico')">
-                        <span class="featured-icon">⚡</span>
-                        <span><strong>Elétrica</strong><small>Tomadas, chuveiros, iluminação e disjuntores</small></span>
-                        <b>›</b>
-                    </button>
-                    <button class="featured-card featured-install" onclick="openCategory('cat-instalacoes')">
-                        <span class="featured-icon">🔨</span>
-                        <span><strong>Instalações</strong><small>TV, prateleiras, cortinas, varais e fixações</small></span>
-                        <b>›</b>
-                    </button>
-                    <button class="featured-card featured-paint" onclick="openCategory('cat-pintor')">
-                        <span class="featured-icon">🎨</span>
-                        <span><strong>Pintura & Reparos</strong><small>Paredes, gesso, rejunte e acabamentos</small></span>
-                        <b>›</b>
-                    </button>
-                </div>
+const serviceSelect = document.querySelector("#service");
+const categoryButtons = document.querySelectorAll("[data-category]");
+const budgetForm = document.querySelector("#budgetForm");
+const whatsappButtons = document.querySelectorAll("[data-whatsapp]");
 
-                <div class="all-services-head">
-                    <h3>Mais soluções</h3>
-                    <span>Outras áreas disponíveis</span>
-                </div>
-                <div class="grid" id="categories-grid"></div>
-            </section>
 
-            <section class="how-it-works-card">
-                <div class="section-kicker">COMO FUNCIONA</div>
-                <h2>É simples. Você chama, <span>a gente resolve.</span></h2>
-                <div class="how-steps">
-                    <div class="step-item"><div class="step-badge">1</div><div><strong>Você chama</strong><p>Conte o que precisa pelo WhatsApp.</p></div></div>
-                    <div class="step-item"><div class="step-badge">2</div><div><strong>A gente avalia</strong><p>Analisamos as informações e combinamos os detalhes.</p></div></div>
-                    <div class="step-item"><div class="step-badge">3</div><div><strong>Você agenda</strong><p>Definimos o melhor dia e horário.</p></div></div>
-                    <div class="step-item"><div class="step-badge">4</div><div><strong>A gente resolve</strong><p>Serviço realizado conforme combinado.</p></div></div>
-                </div>
-            </section>
+/* =========================================================
+   WHATSAPP
+   ========================================================= */
 
-            <section class="trust-section">
-                <div class="section-kicker">POR QUE A CLICK?</div>
-                <h2>Feito para facilitar <span>sua vida.</span></h2>
-                <div class="trust-grid">
-                    <div><span>📱</span><strong>Fácil de contratar</strong><p>O atendimento começa pelo WhatsApp, sem burocracia.</p></div>
-                    <div><span>⚡</span><strong>Agilidade</strong><p>Foco em resolver o problema sem enrolação.</p></div>
-                    <div><span>🔎</span><strong>Transparência</strong><p>Você combina os detalhes antes da execução.</p></div>
-                    <div><span>🛠️</span><strong>Uma só Click</strong><p>Diversas soluções para diferentes necessidades do imóvel.</p></div>
-                </div>
-            </section>
+function openWhatsApp(message = "") {
 
-            <section class="portfolio-section">
-                <div class="section-kicker">NOSSO TRABALHO</div>
-                <h2>Alguns serviços que <span>podemos fazer.</span></h2>
-                <p class="section-lead">Enquanto construímos nosso portfólio, vamos priorizar fotos reais dos serviços realizados pela Click Reparos.</p>
-                <div class="carousel-container">
-                    <div class="carousel-card"><div class="media-container"><img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=700&q=80" alt="Exemplo de reparo em torneira" loading="lazy"></div><div class="card-info"><h4>Reparo hidráulico</h4><p>Exemplo visual • Troca e manutenção</p></div></div>
-                    <div class="carousel-card"><div class="media-container"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=700&q=80" alt="Exemplo de serviço elétrico" loading="lazy"></div><div class="card-info"><h4>Serviço elétrico</h4><p>Exemplo visual • Instalações e reparos</p></div></div>
-                    <div class="carousel-card"><div class="media-container"><img src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=700&q=80" alt="Exemplo de pintura" loading="lazy"></div><div class="card-info"><h4>Pintura & acabamento</h4><p>Exemplo visual • Reparos em paredes</p></div></div>
-                </div>
-                <div class="portfolio-note">📸 <strong>Próximo passo:</strong> substituir estas imagens por fotos reais dos nossos próprios serviços.</div>
-            </section>
+  const encodedMessage = encodeURIComponent(message);
 
-            <section class="testimonial-placeholder">
-                <div class="section-kicker">CONFIANÇA</div>
-                <h2>Quem chama, <span>recomenda.</span></h2>
-                <p>Vamos construir esta seção com avaliações reais dos primeiros clientes da Click Reparos.</p>
-                <div class="review-cta">⭐ Depois de cada serviço, vamos pedir uma avaliação.</div>
-            </section>
+  const url = `https://wa.me/${WHATSAPP}?text=${encodedMessage}`;
 
-            <section class="final-cta">
-                <div class="final-cta-kicker">PRECISA DE UM REPARO?</div>
-                <h2>Não deixe aquele problema virar uma dor de cabeça.</h2>
-                <p>Conte para a Click Reparos o que você precisa. A gente orienta você.</p>
-                <button class="hero-cta" type="button" onclick="openGeneralWhatsApp()">🟢 Solicitar orçamento pelo WhatsApp</button>
-                <small>📍 Itaboraí e região</small>
-            </section>
+  window.open(url, "_blank");
+}
 
-            <footer class="app-footer">
-                <strong>CLICK REPAROS</strong>
-                <span>Manutenção, reparos e instalações.</span>
-                <span>📍 Itaboraí e região</span>
-                <a href="https://instagram.com/click_reparo" target="_blank" rel="noopener">@click_reparo no Instagram</a>
-            </footer>
-        </main>
 
-        <main id="view-service-list" class="view">
-            <div class="view-header">
-                <div>
-                    <span class="view-kicker">SERVIÇOS</span>
-                    <h2 class="view-title" id="list-category-title">Categoria</h2>
-                </div>
-                <button class="close-btn" id="btn-close-list" aria-label="Voltar">✕</button>
-            </div>
-            <p class="list-helper">Escolha o serviço mais próximo do que você precisa.</p>
-            <ul class="service-list" id="services-ul"></ul>
-            <button class="back-home-btn" onclick="closeToCategories()">← Voltar para a página inicial</button>
-        </main>
+/* =========================================================
+   CTA PRINCIPAL
+   ========================================================= */
 
-        <main id="view-service-detail" class="view">
-            <div class="detail-card">
-                <button class="close-btn" id="btn-close-detail" aria-label="Voltar">✕</button>
-                <div class="detail-category" id="detail-category">Categoria</div>
-                <h1 class="detail-title" id="detail-title">Nome do Serviço</h1>
-                <p class="detail-description" id="detail-description">Explicação do serviço...</p>
-                <div class="detail-tip">📷 Se puder, envie fotos ou um vídeo do problema pelo WhatsApp. Isso ajuda na avaliação.</div>
-                <button id="btn-open-form" class="btn-primary">🛠️ Solicitar orçamento</button>
-            </div>
-        </main>
+whatsappButtons.forEach(button => {
 
-        <div id="modal-quote" class="modal-overlay">
-            <div class="modal-card">
-                <button class="close-btn modal-close" id="btn-close-modal" aria-label="Fechar">✕</button>
-                <h3 class="modal-title">Vamos entender o que você precisa</h3>
-                <p class="modal-subtitle" id="modal-service-subtitle">Serviço selecionado</p>
+  button.addEventListener("click", function(event) {
 
-                <form id="form-quote">
-                    <div class="form-group">
-                        <label for="client-name">Seu nome *</label>
-                        <input type="text" id="client-name" placeholder="Ex.: João" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="client-phone">Seu WhatsApp</label>
-                        <input type="tel" id="client-phone" placeholder="(21) 99999-9999" inputmode="tel">
-                    </div>
-                    <div class="form-group">
-                        <label for="client-bairro">Bairro *</label>
-                        <input type="text" id="client-bairro" placeholder="Ex.: Centro" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="client-address">Endereço</label>
-                        <input type="text" id="client-address" placeholder="Rua e número (pode informar depois)">
-                    </div>
-                    <div class="form-group">
-                        <label for="client-notes">Conte um pouco mais</label>
-                        <textarea id="client-notes" rows="4" placeholder="O que aconteceu? Tem urgência? Se quiser, depois envie fotos pelo WhatsApp."></textarea>
-                    </div>
-                    <button type="submit" class="btn-whatsapp">
-                        <span>◉</span>
-                        Continuar pelo WhatsApp
-                    </button>
-                    <p class="form-privacy">Seu pedido será aberto no WhatsApp da Click Reparos para continuarmos o atendimento.</p>
-                </form>
-            </div>
-        </div>
+    event.preventDefault();
 
-        <a class="floating-whatsapp" href="https://wa.me/5521999999999" target="_blank" rel="noopener" aria-label="Falar com a Click Reparos no WhatsApp">
-            <span>◉</span><b>WhatsApp</b>
-        </a>
-    </div>
-    <script src="script.js"></script>
-    <script>
-        function openGeneralWhatsApp() {
-            const text = encodeURIComponent("Olá! Vim pelo site da Click Reparos e preciso de um orçamento. Meu problema é: ");
-            window.open("https://wa.me/5521999999999?text=" + text, "_blank");
-        }
-    </script>
-</body>
-</html>
+    const message =
+      "Olá! Vim pelo site da Click Reparos e preciso de um orçamento. " +
+      "Gostaria de saber como funciona o atendimento.";
+
+    openWhatsApp(message);
+
+  });
+
+});
+
+
+/* =========================================================
+   CATEGORIAS
+   ========================================================= */
+
+function showCategory(category) {
+
+  if (!serviceSelect) return;
+
+  serviceSelect.innerHTML =
+    '<option value="">Selecione o que você precisa</option>';
+
+  if (!services[category]) return;
+
+  services[category].forEach(service => {
+
+    const option = document.createElement("option");
+
+    option.value = service;
+    option.textContent = service;
+
+    serviceSelect.appendChild(option);
+
+  });
+
+}
+
+
+/* =========================================================
+   BOTÕES DAS CATEGORIAS
+   ========================================================= */
+
+categoryButtons.forEach(button => {
+
+  button.addEventListener("click", function() {
+
+    const category = this.dataset.category;
+
+    showCategory(category);
+
+    const formSection =
+      document.querySelector("#orcamento");
+
+    if (formSection) {
+
+      formSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+    }
+
+  });
+
+});
+
+
+/* =========================================================
+   FORMULÁRIO DE ORÇAMENTO
+   ========================================================= */
+
+if (budgetForm) {
+
+  budgetForm.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const name =
+      document.querySelector("#name")?.value.trim() || "";
+
+    const phone =
+      document.querySelector("#phone")?.value.trim() || "";
+
+    const neighborhood =
+      document.querySelector("#neighborhood")?.value.trim() || "";
+
+    const address =
+      document.querySelector("#address")?.value.trim() || "";
+
+    const service =
+      document.querySelector("#service")?.value.trim() || "";
+
+    const details =
+      document.querySelector("#details")?.value.trim() || "";
+
+
+    if (!name) {
+
+      alert("Por favor, informe seu nome.");
+
+      return;
+
+    }
+
+
+    if (!neighborhood) {
+
+      alert("Por favor, informe seu bairro.");
+
+      return;
+
+    }
+
+
+    if (!service) {
+
+      alert("Selecione o serviço que você precisa.");
+
+      return;
+
+    }
+
+
+    let message =
+      `Olá! Sou ${name} e gostaria de solicitar um orçamento com a Click Reparos.%0A%0A`;
+
+    message =
+      `Olá! Sou ${name} e gostaria de solicitar um orçamento com a Click Reparos.\n\n`;
+
+    message += `🔧 Serviço: ${service}\n`;
+
+    if (phone) {
+      message += `📱 Meu WhatsApp: ${phone}\n`;
+    }
+
+    message += `📍 Bairro: ${neighborhood}\n`;
+
+    if (address) {
+      message += `🏠 Endereço: ${address}\n`;
+    }
+
+    if (details) {
+      message += `\n📝 Sobre o serviço:\n${details}\n`;
+    }
+
+    message +=
+      "\n📷 Posso enviar fotos ou vídeos do serviço, se necessário.";
+
+
+    openWhatsApp(message);
+
+  });
+
+}
+
+
+/* =========================================================
+   MÁSCARA DE TELEFONE
+   ========================================================= */
+
+const phoneInput = document.querySelector("#phone");
+
+if (phoneInput) {
+
+  phoneInput.addEventListener("input", function() {
+
+    let value = this.value.replace(/\D/g, "");
+
+    if (value.length > 11) {
+      value = value.substring(0, 11);
+    }
+
+    if (value.length <= 10) {
+
+      value = value.replace(
+        /^(\d{2})(\d{4})(\d{0,4}).*/,
+        "($1) $2-$3"
+      );
+
+    } else {
+
+      value = value.replace(
+        /^(\d{2})(\d{5})(\d{0,4}).*/,
+        "($1) $2-$3"
+      );
+
+    }
+
+    this.value = value;
+
+  });
+
+}
+
+
+/* =========================================================
+   MENU MOBILE
+   ========================================================= */
+
+const menuButton =
+  document.querySelector("#menuButton");
+
+const mobileMenu =
+  document.querySelector("#mobileMenu");
+
+if (menuButton && mobileMenu) {
+
+  menuButton.addEventListener("click", function() {
+
+    mobileMenu.classList.toggle("active");
+
+  });
+
+
+  mobileMenu.querySelectorAll("a").forEach(link => {
+
+    link.addEventListener("click", function() {
+
+      mobileMenu.classList.remove("active");
+
+    });
+
+  });
+
+}
+
+
+/* =========================================================
+   SCROLL SUAVE
+   ========================================================= */
+
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+
+  link.addEventListener("click", function(event) {
+
+    const targetId =
+      this.getAttribute("href");
+
+    if (!targetId || targetId === "#") return;
+
+    const target =
+      document.querySelector(targetId);
+
+    if (!target) return;
+
+    event.preventDefault();
+
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  });
+
+});
+
+
+/* =========================================================
+   BOTÃO FLUTUANTE DO WHATSAPP
+   ========================================================= */
+
+const floatingWhatsApp =
+  document.querySelector("#floatingWhatsApp");
+
+if (floatingWhatsApp) {
+
+  floatingWhatsApp.addEventListener("click", function(event) {
+
+    event.preventDefault();
+
+    const message =
+      "Olá! Vim pelo site da Click Reparos. Preciso de ajuda com um reparo e gostaria de solicitar um orçamento.";
+
+    openWhatsApp(message);
+
+  });
+
+}
+
+
+/* =========================================================
+   ANO AUTOMÁTICO NO RODAPÉ
+   ========================================================= */
+
+const yearElements =
+  document.querySelectorAll("[data-year]");
+
+yearElements.forEach(element => {
+
+  element.textContent =
+    new Date().getFullYear();
+
+});
+
+
+/* =========================================================
+   ANIMAÇÃO DE ENTRADA
+   ========================================================= */
+
+const animatedElements =
+  document.querySelectorAll(".reveal");
+
+if ("IntersectionObserver" in window) {
+
+  const observer =
+    new IntersectionObserver(
+      entries => {
+
+        entries.forEach(entry => {
+
+          if (entry.isIntersecting) {
+
+            entry.target.classList.add("visible");
+
+            observer.unobserve(entry.target);
+
+          }
+
+        });
+
+      },
+      {
+        threshold: 0.12
+      }
+    );
+
+
+  animatedElements.forEach(element => {
+
+    observer.observe(element);
+
+  });
+
+}
+
+
+/* =========================================================
+   CONSOLE
+   ========================================================= */
+
+console.log(
+  "Click Reparos — site carregado com sucesso."
+);
